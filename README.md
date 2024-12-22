@@ -1,5 +1,7 @@
 # Fly Pineapple Owl, Fly!
 
+![Pineapple Owl](./assets/pineowl.webp)
+
 Repository for the **$PINEOWL** (`0x79C6Ffe2ccBca761e9E289A69432bFfB0b744876` on Ethereum Mainnet) to be bridgeable on **Base L2** using the [L2StandardERC20](https://github.com/ethereum-optimism/optimism/blob/186e46a47647a51a658e699e9ff047d39444c2de/packages/contracts-bedrock/contracts/universal/OptimismMintableERC20Factory.sol) pattern.
 
 ## Overview
