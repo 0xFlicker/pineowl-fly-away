@@ -13,17 +13,6 @@ const baseL1StandardBridgeAddress =
   "0x3154Cf16ccdb4C6d922629664174b904d80F2C35";
 
 function useBridge(amount: bigint) {
-  const { address } = useAccount();
-  const { data: allowance } = useReadContract({
-    address: pineOwlTokenL1Address,
-    chainId: mainnet.id,
-    abi: erc20Abi,
-    functionName: "allowance",
-    args: address ? [address, baseL1StandardBridgeAddress] : undefined,
-  });
-
-  console.log(address, allowance);
-
   const { writeContractAsync } = useWriteContract();
 
   const doBridge = useCallback(() => {
@@ -38,6 +27,7 @@ function useBridge(amount: bigint) {
         200000,
         "0x",
       ],
+      chainId: mainnet.id,
     })
   }, [amount, writeContractAsync]);
 
@@ -46,7 +36,8 @@ function useBridge(amount: bigint) {
       abi: erc20Abi,
       address: pineOwlTokenL1Address,
       functionName: "approve",
-      args: [baseL1StandardBridgeAddress, parseUnits(amount.toString(), 9)],
+      args: [baseL1StandardBridgeAddress, parseUnits(amount.toString(), 18)],
+      chainId: mainnet.id,
     });
   }, [amount, writeContractAsync]);
 
