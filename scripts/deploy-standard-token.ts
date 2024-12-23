@@ -1,5 +1,7 @@
-import { ethers } from "hardhat";
+import hre from "hardhat";
+import { createWalletClient } from "viem";
 import * as dotenv from "dotenv";
+import { optimismMintableErc20FactoryAbi } from "../generated";
 
 dotenv.config();
 
@@ -14,43 +16,31 @@ dotenv.config();
  */
 
 async function main() {
+  const [deployer] = await hre.viem.getWalletClients();
+
   // Pull config from environment variables or hard-code as needed
   const l1TokenAddress = "0x79C6Ffe2ccBca761e9E289A69432bFfB0b744876";
-  const l2BridgeAddress =
-    process.env.L2_BRIDGE_ADDRESS ||
-    "0x4200000000000000000000000000000000000010";
+  const OptimismMintableERC20FactoryAddress =
+    (process.env.OPTIMISM_MINTABLE_ERC20_FACTORY_ADDRESS as `0x${string}`) ||
+    "0xF10122D428B4bc8A9d050D06a2037259b4c4B83B";
   const tokenName = "Pineapple Owl";
   const tokenSymbol = "PINEOWL";
-  const tokenDecimals = 18;
 
-  // 1. Deploy the L2StandardERC20 contract
-  // If you have a compiled local artifact:
-  //    const L2StandardERC20Factory = await ethers.getContractFactory("L2StandardERC20");
-  //
-  // Some projects use a separate "L2StandardERC20Factory" to create new tokens on L2.
-  // We'll deploy directly via the factory approach here.
-  const L2StandardERC20Factory = await ethers.getContractFactory(
-    "L2StandardERC20"
-  );
+  // 1. Deploy the OptimismMintableERC20
+  const tx = await deployer.writeContract({
+    abi: optimismMintableErc20FactoryAbi,
+    address: OptimismMintableERC20FactoryAddress,
+    functionName: "createOptimismMintableERC20WithDecimals",
+    args: [l1TokenAddress, tokenName, tokenSymbol, 9],
+  });
 
-  console.log(`Deploying L2StandardERC20 with constructor args:
-    _l2Bridge: ${l2BridgeAddress}
-    _l1Token:  ${l1TokenAddress}
-    _name:     ${tokenName}
-    _symbol:   ${tokenSymbol}
-    _decimals: ${tokenDecimals}
-  `);
+  console.log(`Transaction hash: ${tx}`);
+  const publicClient = await hre.viem.getPublicClient();
+  const receipt = await publicClient.waitForTransactionReceipt({
+    hash: tx,
+  });
 
-  const l2Token = await L2StandardERC20Factory.deploy(
-    l2BridgeAddress,
-    l1TokenAddress,
-    tokenName,
-    tokenSymbol,
-    tokenDecimals
-  );
-  await l2Token.deployed();
-
-  console.log(`L2 token deployed at: ${l2Token.address}`);
+  console.log(`Transaction receipt: ${receipt}`);
 }
 
 main()

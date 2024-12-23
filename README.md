@@ -13,10 +13,9 @@ Repository for the **$PINEOWL** (`0x79C6Ffe2ccBca761e9E289A69432bFfB0b744876` on
 
 ```
 .
-├── contracts
-│ └── L2Token.sol // Your L2StandardERC20-based contract
 ├── scripts
 │ ├── deploy-standard-token.ts // Deploys the L2 token
+│ ├── bridge-eth-to-base.ts // Bridges PINEOWL to Base directly
 ├── hardhat.config.ts // Hardhat config (TS version)
 ├── package.json // Project metadata and scripts
 ├── tsconfig.json // TypeScript configuration
@@ -41,11 +40,11 @@ Repository for the **$PINEOWL** (`0x79C6Ffe2ccBca761e9E289A69432bFfB0b744876` on
 3. **Deploy the L2 Token**
 
    ```bash
-   npx hardhat run scripts/deploy-standard-token.ts --network base
+   pnpm hardhat run --network base scripts/deploy-standard-token.ts
    ```
 
-4. **Verify the L2 Token**
+4. **Bridge PINEOWL to Base**
 
    ```bash
-   npx hardhat verify --network base <L2_TOKEN_ADDRESS>
+   pnpm bridge:eth-to-base
    ```

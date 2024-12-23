@@ -5,19 +5,28 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "deploy:base": "hardhat run scripts/deploy-standard-token.ts --network base"
+    "build": "esbuild scripts/bridge-eth-to-base.ts --platform=node --target=node23 --bundle --outfile=dist/scripts/bridge-eth-to-base.js",
+    "deploy:base": "hardhat run scripts/deploy-standard-token.ts --network base",
+    "bridge:eth-to-base": "pnpm build  && hardhat run --network base dist/scripts/bridge-eth-to-base.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@eth-optimism/viem": "^0.0.12",
     "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "@nomicfoundation/hardhat-viem": "^2.0.6",
     "@types/node": "^22.10.2",
+    "@wagmi/cli": "^2.1.22",
+    "esbuild": "^0.24.2",
     "hardhat": "^2.22.17",
+    "prettier": "^3.4.2",
     "ts-node": "^10.9.2",
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.2",
+    "viem": "^2.21.57"
   },
   "dependencies": {
+    "@eth-optimism/contracts-bedrock": "^0.17.3",
     "dotenv": "^16.4.7",
     "ethers": "^6.13.4"
   }
