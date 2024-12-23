@@ -14,15 +14,12 @@ const baseL1StandardBridgeAddress =
 
 function useBridge(amount: bigint) {
   const { address } = useAccount();
-  const { data: allowance, promise } = useReadContract({
+  const { data: allowance } = useReadContract({
     address: pineOwlTokenL1Address,
     chainId: mainnet.id,
     abi: erc20Abi,
     functionName: "allowance",
     args: address ? [address, baseL1StandardBridgeAddress] : undefined,
-    query: {
-      experimental_prefetchInRender: true,
-    }
   });
 
   console.log(address, allowance);
