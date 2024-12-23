@@ -51,13 +51,9 @@ function useBridge(amount: bigint) {
   }, [amount, writeContractAsync]);
 
   const doApproveOrBridge = useCallback(async () => {
-    if (!allowance || allowance < amount) {
-      doBridge();
-    } else {
-      await doApprove();
-      await doBridge();
-    }
-  }, [allowance, amount, doBridge, doApprove]);
+    await doApprove();
+    await doBridge();
+  }, [doBridge, doApprove]);
 
   return {
     doBridge,
