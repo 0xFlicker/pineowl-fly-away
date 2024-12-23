@@ -6,7 +6,8 @@ import { createConfig, http, WagmiProvider } from 'wagmi';
 import { ConnectKitProvider, getDefaultConfig } from "connectkit";
 
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+});
 
 export const config = {
   chains: [base, mainnet],

@@ -14,15 +14,18 @@ const baseL1StandardBridgeAddress =
 
 function useBridge(amount: bigint) {
   const { address } = useAccount();
-  const { data: allowance } = useReadContract({
+  const { data: allowance, promise } = useReadContract({
     address: pineOwlTokenL1Address,
     chainId: mainnet.id,
     abi: erc20Abi,
     functionName: "allowance",
     args: address ? [address, baseL1StandardBridgeAddress] : undefined,
+    query: {
+      experimental_prefetchInRender: true,
+    }
   });
 
-  const allowanceIsSufficient = allowance && allowance >= amount;
+  console.log(address, allowance);
 
   const { writeContractAsync } = useWriteContract();
 
@@ -50,10 +53,19 @@ function useBridge(amount: bigint) {
     });
   }, [amount, writeContractAsync]);
 
+  const doApproveOrBridge = useCallback(async () => {
+    if (!allowance || allowance < amount) {
+      doBridge();
+    } else {
+      await doApprove();
+      await doBridge();
+    }
+  }, [allowance, amount, doBridge, doApprove]);
+
   return {
     doBridge,
     doApprove,
-    allowanceIsSufficient,
+    doApproveOrBridge
   };
 }
 
@@ -61,15 +73,9 @@ function useBridge(amount: bigint) {
 
 export default function Bridge() {
   const [amount, setAmount] = useState<bigint>(0n);
-  const { doBridge, doApprove, allowanceIsSufficient } = useBridge(amount);
+  const { doApproveOrBridge } = useBridge(amount);
 
-  const doApproveOrBridge = useCallback(() => {
-    if (allowanceIsSufficient) {
-      doBridge();
-    } else {
-      doApprove().then(doBridge);
-    }
-  }, [allowanceIsSufficient, doBridge, doApprove]);
+
 
   return (
     <div className="bg-white shadow-lg rounded-lg p-6 w-96">
