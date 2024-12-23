@@ -33,7 +33,7 @@ function useBridge(amount: bigint) {
     return writeContractAsync({
       abi: baseL1StandardBridgeAbi,
       address: baseL1StandardBridgeAddress,
-      functionName: "bridgeERC20",
+      functionName: "depositERC20",
       args: [
         pineOwlTokenL1Address,
         pineOwlTokenL2Address,
