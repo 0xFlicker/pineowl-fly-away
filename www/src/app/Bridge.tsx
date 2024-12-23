@@ -5,7 +5,7 @@ import Connect from "./Connect";
 import { useCallback, useState } from "react";
 import { erc20Abi, parseUnits } from "viem";
 import { mainnet } from "viem/chains";
-import { useAccount, useConnections, useReadContract, useWriteContract } from "wagmi";
+import { useAccount, useReadContract, useWriteContract } from "wagmi";
 
 const pineOwlTokenL1Address = "0x79C6Ffe2ccBca761e9E289A69432bFfB0b744876";
 const pineOwlTokenL2Address = "0x69EAC44Bf0f8653D1D78B86A544a134293E840FC";
@@ -60,8 +60,6 @@ function useBridge(amount: bigint) {
 
 
 export default function Bridge() {
-  const { isConnected } = useAccount();
-
   const [amount, setAmount] = useState<bigint>(0n);
   const { doBridge, doApprove, allowanceIsSufficient } = useBridge(amount);
 
