@@ -12,7 +12,7 @@
     "@tanstack/react-query": "^5.62.8",
     "@wagmi/cli": "^2.1.22",
     "connectkit": "^1.8.2",
-    "next": "15.1.2",
+    "next": "15.1.11",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "viem": "^2.21.55",
